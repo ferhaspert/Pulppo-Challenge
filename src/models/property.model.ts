@@ -23,9 +23,17 @@ export interface IProperty extends Document {
     original: any; // Define if needed
     announcers: any[]; // Define if needed
     hash: { $numberLong: string };
+    type: string;
     _id: ObjectId;
     createdAt: Date;
     updatedAt: Date;
+  };
+  portals: {
+    inmuebles24: {
+      url: string;
+      id: string;
+      status: string;
+    };
   };
   company: {
     name: string;
@@ -60,12 +68,12 @@ export interface IProperty extends Document {
   status: {
     last: string;
     history: { status: string; timestamp: Date }[];
-    reasonToFinish: string;
+    reasonToFinish: string | null;
   };
   type: string;
   services: { id: number; name: string; type: number }[];
   attributes: {
-    age: number;
+    yearBuild: number;
     condition: string;
     expenses: number;
     expensesDescription: string;
@@ -105,18 +113,38 @@ export interface IProperty extends Document {
   createdAt: Date;
   updatedAt: Date;
   __v: number;
-  portals: {
-    easybroker: { id: string; url: string; status: string };
-  };
   captureStatus: { history: any[] }; // Define if needed
   contract: { history: any[] }; // Define if needed
   isForeclosure: boolean;
   quality: string;
+  address: {
+    street: string;
+    location: {
+      type: string;
+      coordinates: number[];
+    };
+    showLocation: boolean;
+    zip: string;
+    city: {
+      name: string;
+      id: string;
+    };
+    state: {
+      name: string;
+      id: string;
+    };
+    neighborhood: {
+      name: string;
+      id: string;
+    };
+    country: {
+      name: string;
+      id: string;
+    };
+  };
 }
 
-const PropertyModel = mongoose.model<IProperty>(
-  'Property',
-  PropertySchema,
-  'mls'
-);
+const PropertyModel =
+  mongoose.models.Property ||
+  mongoose.model<IProperty>('Property', PropertySchema, 'mls');
 export default PropertyModel;

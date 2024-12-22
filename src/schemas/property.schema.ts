@@ -16,7 +16,8 @@ export const PropertySchema: Schema = new Schema({
     url: { type: String, required: true },
     original: { type: Schema.Types.Mixed }, // Define if needed
     announcers: { type: [Schema.Types.Mixed] }, // Define if needed
-    hash: { $numberLong: { type: String, required: true } },
+    hash: { type: String, required: true },
+    type: { type: String, required: true },
     _id: { type: Schema.Types.ObjectId, required: true },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
@@ -59,7 +60,7 @@ export const PropertySchema: Schema = new Schema({
         timestamp: { type: Date, required: true },
       },
     ],
-    reasonToFinish: { type: String, required: true },
+    reasonToFinish: { type: Schema.Types.Mixed },
   },
   type: { type: String, required: true },
   services: [
@@ -70,7 +71,7 @@ export const PropertySchema: Schema = new Schema({
     },
   ],
   attributes: {
-    age: { type: Number, required: true },
+    yearBuild: { type: Number, required: true },
     condition: { type: String, required: true },
     expenses: { type: Number, required: true },
     expensesDescription: { type: String, required: true },
@@ -133,7 +134,7 @@ export const PropertySchema: Schema = new Schema({
   updatedAt: { type: Date, required: true },
   __v: { type: Number, required: true },
   portals: {
-    easybroker: {
+    inmuebles24: {
       id: { type: String, required: true },
       url: { type: String, required: true },
       status: { type: String, required: true },
@@ -147,4 +148,29 @@ export const PropertySchema: Schema = new Schema({
   },
   isForeclosure: { type: Boolean, required: true },
   quality: { type: String, required: true },
+  address: {
+    street: { type: String, required: true },
+    location: {
+      type: { type: String, required: true },
+      coordinates: { type: [Number], required: true },
+    },
+    showLocation: { type: Boolean, required: true },
+    zip: { type: String, required: true },
+    city: {
+      name: { type: String, required: true },
+      id: { type: String, required: true },
+    },
+    state: {
+      name: { type: String, required: true },
+      id: { type: String, required: true },
+    },
+    neighborhood: {
+      name: { type: String, required: true },
+      id: { type: String, required: true },
+    },
+    country: {
+      name: { type: String, required: true },
+      id: { type: String, required: true },
+    },
+  },
 });
