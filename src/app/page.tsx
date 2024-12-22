@@ -1,29 +1,5 @@
-import Image from "next/image";
-import React from "react";
-
-const Header = () => (
-  <header className="bg-white shadow-md p-4">
-    <div className="container mx-auto">
-      <Image
-        src={`/logo.png`}
-        className="h-10 object-contain"
-        alt="Pulppo"
-        width={256}
-        height={54}
-      />
-    </div>
-  </header>
-);
-
-const Footer = () => (
-  <footer className="bg-white shadow-md p-4 mt-8">
-    <div className="container mx-auto text-center">
-      <p className="text-sm">
-        &copy; {new Date().getFullYear()} Pulppo. Todos los derechos reservados.
-      </p>
-    </div>
-  </footer>
-);
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
 
 const Objective = () => (
   <section className="my-8 p-4">
@@ -113,7 +89,7 @@ const AdditionalRequirements = () => (
         hacer commits frecuentes y descriptivos.
       </li>
       <li>
-        <strong>Docker (opcional):</strong> Proveer un <code>Dockerfile</code>{" "}
+        <strong>Docker (opcional):</strong> Proveer un <code>Dockerfile</code>{' '}
         para levantar el frontend y otro para el backend (en caso de utilizar
         express.js)
       </li>
