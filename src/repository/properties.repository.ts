@@ -14,3 +14,38 @@ export const getProperties = async () => {
     throw error;
   }
 };
+
+export const getPricesByState = async () => {
+  try {
+    await connectDB();
+    const aggregationPipeline = [
+      {
+        $group: {
+          _id: '$address.state.name',
+          avg: {
+            $avg: '$listing.price.price',
+          },
+          max: {
+            $max: '$listing.price.price',
+          },
+          min: {
+            $min: '$listing.price.price',
+          },
+        },
+      },
+      {
+        $project: {
+          name: '$_id',
+          avg: 1,
+          min: 1,
+          max: 1,
+          _id: 0,
+        },
+      },
+    ];
+    const result = await PropertyModel.aggregate(aggregationPipeline);
+    return result;
+  } catch (err) {
+    console.log(JSON.stringify(err));
+  }
+};
