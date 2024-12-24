@@ -36,17 +36,18 @@ const Dashboard = () => {
       <main className="max-w-4xl mx-auto p-4">
         <section className="my-8 p-4">
           <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-          <PropertyTypeSelect
-            onPropertyTypeChange={setSelectedPropertyType}
-            selectedPropertyType={selectedPropertyType}
-          />
+          <section className="filters mb-8">
+            <PropertyTypeSelect
+              onPropertyTypeChange={setSelectedPropertyType}
+              selectedPropertyType={selectedPropertyType}
+            />
+            <StateSelect
+              onStateChange={setSelectedState}
+              selectedState={selectedState}
+              states={pricesByState}
+            />
+          </section>
           <PricesByStateGraph data={pricesByState} />
-          <h2>Precios por ciudad</h2>
-          <StateSelect
-            onStateChange={setSelectedState}
-            selectedState={selectedState}
-            states={pricesByState}
-          />
           <PricesByCity
             state={selectedState}
             propertyType={selectedPropertyType}

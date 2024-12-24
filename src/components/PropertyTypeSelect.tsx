@@ -26,7 +26,7 @@ export const PropertyTypeSelect: React.FC<PropertyTypeSelectProps> = ({
   }, []);
 
   return (
-    <div>
+    <div className="mr-8">
       <h2>Filtrar por tipo de propiedad:</h2>
       <select
         value={selectedPropertyType}

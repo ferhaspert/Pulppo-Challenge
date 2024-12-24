@@ -10,17 +10,20 @@ export const StateSelect: React.FC<StateSelectProps> = ({
   selectedState,
 }) => {
   return (
-    <select
-      value={selectedState}
-      onChange={(e) => onStateChange(e.target.value)}
-      className="mb-4"
-    >
-      <option value="">Seleccione un estado</option>
-      {states.map((state) => (
-        <option key={state.name} value={state.name}>
-          {state.name}
-        </option>
-      ))}
-    </select>
+    <div>
+      <h2>Filtrar por estado: </h2>
+      <select
+        value={selectedState}
+        onChange={(e) => onStateChange(e.target.value)}
+        className="mb-4"
+      >
+        <option value="">Seleccione un estado</option>
+        {states.map((state) => (
+          <option key={state.name} value={state.name}>
+            {state.name}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };
