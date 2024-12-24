@@ -12,13 +12,39 @@ import {
   YAxis,
 } from 'recharts';
 
-export const PricesByCity = ({ state }: { state?: string }) => {
+function constructUrlParams(
+  params?: Record<string, string | number | boolean | null | undefined>
+): string {
+  if (!params) {
+    return ''; // Si no se proporcionan parámetros, devuelve una cadena vacía
+  }
+
+  const queryString = Object.entries(params)
+    .filter(
+      ([_, value]) => value !== undefined && value !== null && value !== ''
+    ) // Excluye valores undefined, null o cadenas vacías
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
+    )
+    .join('&');
+
+  return queryString ? `?${queryString}` : ''; // Agrega el "?" solo si hay parámetros
+}
+
+export const PricesByCity = ({
+  state,
+  propertyType,
+}: {
+  state?: string;
+  propertyType?: string;
+}) => {
   const [pricesByCity, setPricesByCity] = useState<PricesByLocation[]>([]);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const url = state ? `/api/city?state=${state}` : `/api/city`;
+        const url = `/api/city${constructUrlParams({ state, propertyType })}`;
         const response = await fetch(url);
         const data: PricesByLocation[] = await response.json();
         setPricesByCity(data);
@@ -28,7 +54,7 @@ export const PricesByCity = ({ state }: { state?: string }) => {
     };
 
     fetchProperties();
-  }, [state]);
+  }, [state, propertyType]);
 
   return (
     <div>

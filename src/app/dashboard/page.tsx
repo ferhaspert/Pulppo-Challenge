@@ -3,49 +3,54 @@ import { Footer } from '@/components/Footer';
 import { PricesByCity } from '@/components/graphs/PricesByCity';
 import { PricesByStateGraph } from '@/components/graphs/PricesByState';
 import { Header } from '@/components/Header';
+import { PropertyTypeSelect } from '@/components/PropertyTypeSelect';
+import { StateSelect } from '@/components/StateSelect';
 import { PricesByLocation } from '@/interfaces/graphs.interfaces';
 import { useEffect, useState } from 'react';
 
 const Dashboard = () => {
   const [pricesByState, setPricesByState] = useState<PricesByLocation[]>([]);
   const [selectedState, setSelectedState] = useState('');
+  const [selectedPropertyType, setSelectedPropertyType] = useState('');
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch('/api/state');
-        const data: PricesByLocation[] = await response.json();
-        setPricesByState(data);
+        console.log(`selectedPropertyType: ${selectedPropertyType}`);
+        const states = selectedPropertyType
+          ? await fetch(`/api/state?propertyType=${selectedPropertyType}`)
+          : await fetch('/api/state');
+        const pricesByLocation: PricesByLocation[] = await states.json();
+        setPricesByState(pricesByLocation);
       } catch (error) {
         console.error('Error fetching prices:', error);
       }
     };
 
     fetchProperties();
-  }, []);
+  }, [selectedPropertyType]);
 
   return (
     <div>
       <Header />
       <main className="max-w-4xl mx-auto p-4">
         <section className="my-8 p-4">
-          <h2 className="text-2xl font-bold mb-4">Gráficos</h2>
-
+          <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+          <PropertyTypeSelect
+            onPropertyTypeChange={setSelectedPropertyType}
+            selectedPropertyType={selectedPropertyType}
+          />
           <PricesByStateGraph data={pricesByState} />
           <h2>Precios por ciudad</h2>
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-            className="mb-4"
-          >
-            <option value="">Seleccione un estado</option>
-            {pricesByState.map((state) => (
-              <option key={state.name} value={state.name}>
-                {state.name}
-              </option>
-            ))}
-          </select>
-          <PricesByCity state={selectedState} />
+          <StateSelect
+            onStateChange={setSelectedState}
+            selectedState={selectedState}
+            states={pricesByState}
+          />
+          <PricesByCity
+            state={selectedState}
+            propertyType={selectedPropertyType}
+          />
         </section>
       </main>
       <Footer />
