@@ -15,10 +15,43 @@ export const getProperties = async () => {
   }
 };
 
-export const getPricesByState = async () => {
+export const gerPropertyTypes = async () => {
   try {
     await connectDB();
     const aggregationPipeline = [
+      {
+        $group: {
+          _id: '$type',
+        },
+      },
+      {
+        $project: {
+          type: '$_id',
+          _id: 0,
+        },
+      },
+    ];
+    const result = await PropertyModel.aggregate(aggregationPipeline);
+    return result;
+  } catch (error) {
+    console.error('Error fetching property types:', error);
+    throw error;
+  }
+};
+
+export const getPricesByState = async (propertyType: string | null) => {
+  try {
+    await connectDB();
+    const aggregationPipeline = [
+      ...(propertyType
+        ? [
+            {
+              $match: {
+                type: propertyType,
+              },
+            },
+          ]
+        : []),
       {
         $group: {
           _id: '$address.state.name',
@@ -47,18 +80,26 @@ export const getPricesByState = async () => {
     return result;
   } catch (err) {
     console.log(JSON.stringify(err));
+    throw err;
   }
 };
 
-export const getPricesByCity = async (state?: string | null) => {
+export const getPricesByCity = async ({
+  propertyType,
+  state,
+}: {
+  state?: string | null;
+  propertyType: string | null;
+}) => {
   try {
     await connectDB();
     const aggregationPipeline = [
-      ...(state
+      ...(state || propertyType
         ? [
             {
               $match: {
-                'address.state.name': state,
+                ...(state ? { 'address.state.name': state } : {}),
+                ...(propertyType ? { type: propertyType } : {}),
               },
             },
           ]
@@ -91,5 +132,6 @@ export const getPricesByCity = async (state?: string | null) => {
     return result;
   } catch (err) {
     console.log(JSON.stringify(err));
+    throw err;
   }
 };
